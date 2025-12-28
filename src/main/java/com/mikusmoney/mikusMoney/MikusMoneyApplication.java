@@ -11,11 +11,12 @@ public class MikusMoneyApplication {
         SpringApplication.run(MikusMoneyApplication.class, args);
 
         System.out.println("======================================");
-        System.out.println("Fan: HI MIKU I'M A FAN!");
-        System.out.println("Miku: Hi! Thanks for your support");
+        System.out.println("Miku: Today's my birthday");
+        System.out.println("Fan: Good birthday Miku! ");
         System.out.println("Fan: :D");
-        System.out.println("Miku: Send me nudes :D");
-        System.out.println("Fan: Miku noo D:");
+        System.out.println("Miku: :D");
+        System.out.println("Miku: aight send me nudes");
+        System.out.println("Fan: D:");
         System.out.println("======================================");
 
     }
