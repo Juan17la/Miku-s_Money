@@ -35,7 +35,15 @@ public class MikuCreateRequest {
     @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
     private String password;
 
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
+    private String passwordConfirmation;
+
     @NotBlank(message = "PIN code is required")
     @Pattern(regexp = "^\\d{4,6}$", message = "PIN code must be 4-6 digits")
     private String pinCode;
+
+    @NotBlank(message = "PIN code is required")
+    @Pattern(regexp = "^\\d{4,6}$", message = "PIN code must be 4-6 digits")
+    private String pinCodeConfirmation;
 }
