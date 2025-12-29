@@ -3,7 +3,6 @@ package com.mikusmoney.mikusMoney.repository;
 import com.mikusmoney.mikusMoney.entity.Account;
 
 import jakarta.persistence.LockModeType;
-import jakarta.persistence.Version;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
