@@ -10,7 +10,6 @@ public interface SendMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "transactionType", ignore = true)
     @Mapping(target = "sender", ignore = true) // Will be set in service
     @Mapping(target = "receiver", ignore = true) // Will be set in service
     Send toEntity(SendMoneyRequest request);

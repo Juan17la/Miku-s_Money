@@ -10,7 +10,6 @@ public interface WithdrawMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "transactionType", ignore = true)
     @Mapping(target = "miku", ignore = true) // Will be set in service
     Withdraw toEntity(WithdrawRequest request);
 
