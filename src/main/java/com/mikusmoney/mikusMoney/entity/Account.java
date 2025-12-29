@@ -32,6 +32,10 @@ public class Account {
     @JoinColumn(name = "miku_id", nullable = false, unique = true)
     private Miku miku;
 
+    @Version
+    @Column(name = "lock_version")
+    private long version;
+
     // Lifecycle callback - executed before persist
     @PrePersist
     protected void onCreate() {
