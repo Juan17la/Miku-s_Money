@@ -42,6 +42,14 @@ public class AuthService {
             throw new IllegalArgumentException("Phone number already exists");
         }
         
+        if(!mikuRequest.getPassword().equals(mikuRequest.getPasswordConfirmation())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        if (!mikuRequest.getPinCode().equals(mikuRequest.getPinCodeConfirmation())) {
+            throw new IllegalArgumentException("PIN codes do not match");
+        }
+
         Miku miku = mikuMapper.toEntity(mikuRequest);
         Miku savedMiku = mikuRepository.save(miku);
         
