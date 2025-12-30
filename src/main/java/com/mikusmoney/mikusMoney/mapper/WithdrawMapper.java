@@ -14,6 +14,5 @@ public interface WithdrawMapper {
     Withdraw toEntity(WithdrawRequest request);
 
     @Mapping(target = "mikuId", source = "miku.id")
-    @Mapping(target = "mikuFullName", source = "miku.fullName")
     WithdrawResponse toResponse(Withdraw withdraw);
 }
