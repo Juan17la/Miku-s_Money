@@ -15,4 +15,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Account> findByMikuId(Long mikuId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Account> findByMikuPublicCode(String receiverPublicCode);
 }

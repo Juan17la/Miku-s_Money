@@ -5,10 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mikusmoney.mikusMoney.entity.Withdraw;
+import com.mikusmoney.mikusMoney.entity.Send;
 
 @Repository
-public interface WithdrawRepository extends JpaRepository<Withdraw, Long> {
+public interface SendRepository extends JpaRepository<Send, Long> {
     
-    Page<Withdraw> findByMikuIdOrderByCreatedAtDesc(Long mikuId, Pageable pageable);
+    Page<Send> findBySenderIdOrderByCreatedAtDesc(Long senderId, Pageable pageable);
 }
