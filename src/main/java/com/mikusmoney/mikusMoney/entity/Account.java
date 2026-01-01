@@ -44,9 +44,7 @@ public class Account {
         }
     }
 
-    // Helper methods for account operations
     public void deposit(BigDecimal amount) {
-        validateAmount(amount);
         this.totalMoney = this.totalMoney.add(amount);
     }
 
@@ -76,7 +74,7 @@ public class Account {
 
     private void validateAmount(BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero");
+            throw new IllegalArgumentException("Amount out of bounds");
         }
     }
 }
