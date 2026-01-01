@@ -8,17 +8,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mikusmoney.mikusMoney.dto.AuthResponse;
-import com.mikusmoney.mikusMoney.dto.LoginRequest;
-import com.mikusmoney.mikusMoney.dto.MikuCreateRequest;
-import com.mikusmoney.mikusMoney.dto.MikuResponse;
+import com.mikusmoney.mikusMoney.dto.authenticationDTOs.AuthResponse;
+import com.mikusmoney.mikusMoney.dto.authenticationDTOs.LoginRequest;
+import com.mikusmoney.mikusMoney.dto.mikuDTOs.MikuCreateRequest;
+import com.mikusmoney.mikusMoney.dto.mikuDTOs.MikuResponse;
 import com.mikusmoney.mikusMoney.services.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
