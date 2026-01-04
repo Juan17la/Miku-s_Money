@@ -63,7 +63,9 @@ public class Miku {
 
     // Generate a unique public code (this is a basic implementation, should be enhanced in service)
     public String generatePublicCode() {
-        return String.valueOf(System.currentTimeMillis()).substring(5, 15);
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        // Take the last 10 characters to ensure we always have enough length
+        return timestamp.substring(Math.max(0, timestamp.length() - 10));
     }
 
     // Business method to check if Miku is adult (18+)
