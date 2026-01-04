@@ -12,11 +12,13 @@ import com.mikusmoney.mikusMoney.repository.CredentialRepository;
 import com.mikusmoney.mikusMoney.repository.MikuRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 
@@ -35,22 +37,27 @@ public class AuthService {
     public AuthResponse signUp(MikuCreateRequest mikuRequest) {
 
         if (credentialRepository.existsByEmail(mikuRequest.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
         
         if (credentialRepository.existsByPhoneNumber(mikuRequest.getPhoneNumber())) {
-            throw new IllegalArgumentException("Phone number already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number already exists");
         }
         
         if(!mikuRequest.getPassword().equals(mikuRequest.getPasswordConfirmation())) {
-            throw new IllegalArgumentException("Passwords do not match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
 
         if (!mikuRequest.getPinCode().equals(mikuRequest.getPinCodeConfirmation())) {
-            throw new IllegalArgumentException("PIN codes do not match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN codes do not match");
         }
-
+        
         Miku miku = mikuMapper.toEntity(mikuRequest);
+        
+        if(!miku.isAdult()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User must be at least 18 years old to register");
+        }
+        
         Miku savedMiku = mikuRepository.save(miku);
         
         Credential credential = Credential.builder()
@@ -82,10 +89,10 @@ public class AuthService {
     @Transactional
     public AuthResponse login(String email, String pinCode){
         Credential credential = credentialRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
         
         if (!passwordEncoder.matches(pinCode, credential.getPinCode())) {
-            throw new IllegalArgumentException("Invalid password");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid PIN code");
         }
         
         Miku miku = credential.getMiku();
@@ -99,7 +106,7 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null || !authentication.isAuthenticated()){
-            throw new IllegalStateException("User is not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
         }
 
         Miku miku = (Miku) authentication.getPrincipal();

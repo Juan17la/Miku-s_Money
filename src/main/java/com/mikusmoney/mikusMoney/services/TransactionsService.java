@@ -2,10 +2,13 @@ package com.mikusmoney.mikusMoney.services;
 
 import java.math.BigDecimal;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.mikusmoney.mikusMoney.dto.transactionsDTOs.WithdrawResponse;
 import com.mikusmoney.mikusMoney.dto.transactionsDTOs.depositDTOs.DepositRequest;
@@ -71,7 +74,7 @@ public class TransactionsService {
         // Validate amount
         BigDecimal amount = request.getAmount();
         if (amount.compareTo(BigDecimal.ZERO) <= 0 || amount.compareTo(MAX_AMOUNT) > 0) {
-            throw new IllegalArgumentException("Amount out of bounds");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount out of bounds");
         }
 
         // Execute business logic: update account balance
@@ -118,8 +121,8 @@ public class TransactionsService {
         AuthContext context = authValidator.validateAuth(request.getPinCode());
 
         // Get and validate receiver account
-        Account receiverAccount = accountRepository.findByMikuPublicCode(request.getReceiverPublicCode())
-                .orElseThrow(() -> new IllegalArgumentException("Receiver account not found"));
+        Account receiverAccount = accountRepository.findByMiku_PublicCode(request.getReceiverPublicCode())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiver account not found"));
         
         // Execute business logic: transfer money
         BigDecimal amount = request.getAmount();
@@ -159,7 +162,7 @@ public class TransactionsService {
             } else if (transaction instanceof Send) {
                 return transactionMapper.sendToHistory((Send) transaction);
             }
-            throw new IllegalStateException("Unknown transaction type: " + transaction.getClass().getName());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown transaction type: " + transaction.getClass().getName());
         });
     }
 
