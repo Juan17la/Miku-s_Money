@@ -44,22 +44,26 @@ public class Account {
         }
     }
 
+    private void validatePositiveAmount(BigDecimal amount) {
+    if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+        throw new IllegalArgumentException("Amount must be positive");
+    }
+}
+
     public void deposit(BigDecimal amount) {
+        validatePositiveAmount(amount);
         this.totalMoney = this.totalMoney.add(amount);
     }
 
     public void withdraw(BigDecimal amount) {
-        validateAmount(amount);
+        validatePositiveAmount(amount);
         if (!hasEnoughBalance(amount)) {
             throw new IllegalStateException("Insufficient balance. Current: " + this.totalMoney + ", Required: " + amount);
         }
         this.totalMoney = this.totalMoney.subtract(amount);
     }
 
-    public boolean hasEnoughBalance(BigDecimal amount) {
-        return this.totalMoney.compareTo(amount) >= 0;
-    }
-
+    //luego lo cambio, cosa por cosa, cosa por cosa... I wanna cry :(
     public void transfer(Account destinationAccount, BigDecimal amount) {
         if (destinationAccount == null) {
             throw new IllegalArgumentException("Destination account cannot be null");
@@ -67,14 +71,12 @@ public class Account {
         this.withdraw(amount);
         destinationAccount.deposit(amount);
     }
+    
+    public boolean hasEnoughBalance(BigDecimal amount) {
+        return this.totalMoney.compareTo(amount) >= 0;
+    }
 
     public boolean isEmpty() {
         return this.totalMoney.compareTo(BigDecimal.ZERO) == 0;
-    }
-
-    private void validateAmount(BigDecimal amount) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Amount out of bounds");
-        }
     }
 }
