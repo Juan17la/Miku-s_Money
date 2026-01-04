@@ -2,13 +2,13 @@ package com.mikusmoney.mikusMoney.config;
 
 import com.mikusmoney.mikusMoney.entity.Miku;
 import com.mikusmoney.mikusMoney.repository.MikuRepository;
+import com.mikusmoney.mikusMoney.services.CookiesService;
 import com.mikusmoney.mikusMoney.services.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final MikuRepository mikuRepository;
+    private final CookiesService cookiesService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, 
@@ -122,17 +123,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private String getTokenFromRequest(HttpServletRequest request) {
         // Priority 1: Check for token in cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("AUTH-TOKEN".equals(cookie.getName())) {
-                    String token = cookie.getValue();
-                    if (StringUtils.hasText(token)) {
-                        log.debug("JWT token found in cookie");
-                        return token;
-                    }
-                }
-            }
+        String token = cookiesService.getTokenFromCookies(request);
+        if (token != null) {
+            log.debug("JWT token found in cookie");
+            return token;
         }
         
         // Priority 2: Fallback to Authorization header for backwards compatibility
