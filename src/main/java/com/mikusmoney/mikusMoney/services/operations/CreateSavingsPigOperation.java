@@ -11,6 +11,7 @@ import com.mikusmoney.mikusMoney.entity.SavingsPig;
 import com.mikusmoney.mikusMoney.mapper.SavingsPigMapper;
 import com.mikusmoney.mikusMoney.repository.SavingsPigRepository;
 import com.mikusmoney.mikusMoney.services.AuthContextService;
+import com.mikusmoney.mikusMoney.validations.SavingsValidations;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,25 +22,16 @@ public class CreateSavingsPigOperation implements SavingsOperation<SavingsPigCre
     private final AuthContextService authContextService;
     private final SavingsPigRepository savingsPigRepository;
     private final SavingsPigMapper savingsPigMapper;
+    private final SavingsValidations savingsValidations;
     
     @Override
     public SavingsPigResponse execute(SavingsPigCreationRequest request) {
         
-        // VAlIDATE AUTH
+        // VALIDATE AUTH
         Miku miku = authContextService.getAuthenticatedMiku();
 
-        // VALIDATE LESS THAN 5 NOT BROKEN PIGS
-        
-        int numberOfPigs = savingsPigRepository.getNumberOfPigsByOwnerId(miku.getId());
-        
-        if(numberOfPigs >= 5) {
-            throw new IllegalStateException("You cannot have more than 5 unbroken savings pigs.");
-        }
-        
-        // VALIDATE REQUEST FIELDS
-        if(request.getGoal() == null || request.getGoal().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Goal amount must be greater than zero.");
-        }
+        // VALIDATIONS
+        savingsValidations.createPigValidation(miku.getId(), request.getGoal());
 
         SavingsPig savingsPig = savingsPigMapper.toEntity(request);
         savingsPig.setMiku(miku);
