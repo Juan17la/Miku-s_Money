@@ -1,7 +1,10 @@
 package com.mikusmoney.mikusMoney.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +31,9 @@ public class SavingsPigController {
         
         return ResponseEntity.ok(savingsPigService.createSavingsPig(request));
     }
-    
+
+    @GetMapping("all")
+    public ResponseEntity<List<SavingsPigResponse>> getAllSavingsPigs() {
+        return ResponseEntity.ok(savingsPigService.getSavingsPigs());
+    }
 }
